@@ -1,0 +1,451 @@
+.patient-home-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: padding-left 0.3s ease;
+}
+
+/* Sidebar Adjustments */
+.sidebar-visible {
+    padding-left: 270px;
+}
+
+.sidebar-hidden {
+    padding-left: 0;
+}
+
+/* Scrollable Container */
+.scrollable-container {
+    width: calc(100% - 270px);
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Patient Records Card */
+.patient-records-card {
+    background-color: #e4f0f8;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    color: #002d5b;
+    width: 95%;
+    max-width: 1200px;
+    margin-left: 20%;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+/* Adjust card size based on sidebar visibility */
+.patient-records-card.with-sidebar {
+    width: calc(100% - 270px);
+}
+
+/* Records Header */
+.records-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.records-header h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #002d5b;
+    margin: 0;
+}
+
+.search-container {
+    width: 300px;
+}
+
+.search-input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    border-color: #002d5b;
+    box-shadow: 0 0 5px rgba(0, 45, 91, 0.2);
+}
+
+/* Records List */
+.records-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.record-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.record-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+.record-info {
+    flex: 1;
+}
+
+.record-info h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #002d5b;
+    margin: 0 0 10px 0;
+}
+
+.record-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.record-details p {
+    margin: 0;
+    font-size: 14px;
+    color: #444;
+}
+
+.record-status {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.status-approved {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.status-partially {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.status-denied {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+/* Action buttons */
+.action-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.view-btn {
+    background-color: #002d5b;
+    color: white;
+}
+
+.view-btn:hover {
+    background-color: #003b7d;
+}
+
+/* Popup Styles */
+.prescription-popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.prescription-popup {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    background-color: white;
+    z-index: 1;
+}
+
+.popup-header h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #002d5b;
+    margin: 0;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.close-btn:hover {
+    color: #002d5b;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.doctor-summary {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Centers items horizontally */
+    justify-content: center;
+    /* Centers items vertically (if needed) */
+    text-align: center;
+    width: 100%;
+    margin: 20px auto;
+}
+
+.summary-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 14px;
+    color: #555;
+}
+
+.value {
+    font-size: 16px;
+    color: #222;
+    font-weight: bold;
+}
+
+.summary-item .label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.summary-item .value {
+    font-size: 16px;
+    font-weight: 600;
+    color: #002d5b;
+}
+
+/* Prescription Details */
+.prescriptions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.prescription-item {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.prescription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.prescription-date {
+    font-size: 14px;
+    color: #555;
+}
+
+.prescription-status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-approved {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status-pending {
+    background-color: #fff8e1;
+    color: #f57f17;
+}
+
+.status-partially {
+    background-color: #e3f2fd;
+    color: #1565c0;
+}
+
+.status-denied {
+    background-color: #ffebee;
+    color: #c62828;
+}
+
+.status-not-submitted {
+    background-color: #f5f5f5;
+    color: #616161;
+}
+
+.prescription-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.prescription-section {
+    margin-bottom: 15px;
+}
+
+.prescription-section h4 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #002d5b;
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #eee;
+}
+
+.medications-list,
+.lab-tests-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.medications-list li,
+.lab-tests-list li {
+    padding: 8px 0;
+    border-bottom: 1px dashed #eee;
+}
+
+.medications-list li:last-child,
+.lab-tests-list li:last-child {
+    border-bottom: none;
+}
+
+/* Loading indicator */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+}
+
+/* No results */
+.no-results {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+/* Error container */
+.error-container {
+    text-align: left;
+}
+
+.error {
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .records-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .search-container {
+        width: 100%;
+    }
+
+    .record-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .record-status {
+        margin-top: 15px;
+        flex-direction: row;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .doctor-summary {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .summary-item {
+        min-width: auto;
+        width: 100%;
+    }
+}

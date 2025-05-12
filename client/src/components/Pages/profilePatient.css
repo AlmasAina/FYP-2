@@ -1,0 +1,456 @@
+/* Full Page Wrapper */
+.profile-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url('../../assets/images/patinet_bg.avif') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: padding-left 0.3s ease;
+    padding-left: 250px;
+    overflow-y: auto;
+    /* Allow scrolling */
+}
+
+/* Adjust when sidebar is hidden */
+.profile-page.sidebar-hidden {
+    padding-left: 0;
+}
+
+/* Profile Card Container */
+.profile-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #e4f0f8;
+    border: 2px solid #add8e6;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(173, 216, 230, 0.5);
+    padding: 20px;
+    width: 50%;
+    max-width: 800px;
+    max-height: 90vh;
+    /* Limit height to prevent overflow */
+    margin: 20px auto;
+    transition: width 0.3s ease;
+    color: #002d5b;
+    overflow-y: auto;
+    /* Add scroll if content overflows */
+}
+
+/* Adjust Profile Card in Edit Mode */
+.profile-card.edit-mode {
+    width: 70%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+/* Profile Header */
+.profile-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 20px;
+    gap: 20px;
+}
+
+/* Profile Image Container */
+.profile-image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    border: 2px solid white;
+    overflow: visible;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #e4f0f8;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.edit-icon {
+    position: absolute;
+    bottom: -0px;
+    right: -5px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    border: 1px solid white;
+    border-radius: 50%;
+    background-color: #0056b3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+
+.edit-icon img {
+    width: 32px;
+    height: 32px;
+    background-color: #ffffff;
+    border-radius: 100%;
+}
+
+.edit-icon:hover {
+    box-shadow: 0 0 6px rgba(0, 86, 179, 0.8);
+}
+
+/* Hide the input file selector */
+input[type="file"] {
+    display: none;
+}
+
+/* Profile Info */
+.profile-info {
+    flex: 1;
+    width: 100%;
+}
+
+.profile-info h3 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #002d5b;
+    font-family: 'Poppins', sans-serif;
+}
+
+.profile-info p {
+    margin: 5px 0;
+    color: #002d5b;
+    font-size: 1.1rem;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.edit-btn,
+.insurance-card-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    background-color: #002d5b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.edit-btn:hover,
+.insurance-card-btn:hover {
+    background-color: #003b7d;
+}
+
+.close-popup-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    background-color: #6c757d;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.close-popup-btn:hover {
+    background-color: #5a6268;
+}
+
+/* Profile Details Section */
+.profile-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
+.detail-label {
+    font-weight: bold;
+    color: #08246d;
+    margin-bottom: 4px;
+}
+
+.detail-value {
+    margin: 0;
+    color: #002d5b;
+}
+
+/* Input Fields */
+.profile-input {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #add8e6;
+    border-radius: 5px;
+    font-size: 1rem;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.9);
+    color: #002d5b;
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: #5a9bd6;
+    box-shadow: 0 0 5px rgba(90, 155, 214, 0.5);
+}
+
+/* Error messages */
+.error {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+/* Insurance Section */
+.insurance-section {
+    width: 100%;
+    margin-top: 20px;
+    border-top: 1px solid #add8e6;
+    padding-top: 20px;
+}
+
+.insurance-provider {
+    margin-bottom: 15px;
+}
+
+/* Insurance Card Section */
+.insurance-card-section {
+    width: 100%;
+    margin-top: 15px;
+}
+
+.insurance-card-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #002d5b;
+    font-size: 1.2rem;
+}
+
+.card-preview-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.card-preview {
+    flex: 1;
+    min-width: 180px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card-preview p {
+    margin: 5px 0;
+    font-weight: 500;
+    color: #002d5b;
+}
+
+.card-preview-image {
+    width: 100%;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #add8e6;
+    background-color: white;
+}
+
+.card-upload-btn {
+    padding: 8px 16px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+    width: 100%;
+}
+
+.card-upload-btn:hover {
+    background-color: #003b7d;
+}
+
+/* Insurance Card Popup */
+.insurance-card-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.insurance-card-popup {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow: auto;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.card-popup-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.card-popup-header h3 {
+    margin: 0;
+    color: #002d5b;
+    flex-grow: 1;
+    font-size: 1.5rem;
+}
+
+.card-popup-header p {
+    margin: 0;
+    color: #333;
+    flex-basis: 100%;
+}
+
+/* Card Flip Animation */
+.card-side {
+    position: relative;
+    cursor: pointer;
+    width: 100%;
+    height: auto;
+    max-height: 60vh;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.card-side:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.card-side img {
+    width: 100%;
+    max-height: 60vh;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.flip-instruction {
+    position: absolute;
+    bottom: 20px;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+    z-index: 5;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .profile-card {
+        width: 70%;
+    }
+
+    .profile-card.edit-mode {
+        width: 80%;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-page {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .profile-card {
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+
+    .profile-card.edit-mode {
+        width: 95%;
+    }
+
+    .profile-header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .profile-info {
+        text-align: center;
+    }
+
+    .action-buttons {
+        justify-content: center;
+    }
+
+    .profile-details {
+        grid-template-columns: 1fr;
+    }
+
+    .card-preview-container {
+        flex-direction: column;
+    }
+
+    .card-preview {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+}
+
+/* For very small screens */
+@media (max-width: 480px) {
+    .profile-card {
+        padding: 10px;
+    }
+
+    .profile-image-container {
+        width: 100px;
+        height: 100px;
+    }
+
+    .edit-btn,
+    .insurance-card-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}

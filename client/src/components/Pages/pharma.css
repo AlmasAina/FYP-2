@@ -1,0 +1,427 @@
+:root {
+    --primary-color: #1579f4;
+    --secondary-color: #10B981;
+    --text-color: #050506;
+    --background-color: linear-gradient(135deg, #88898b, #0a62ba);
+    --header-background: linear-gradient(135deg, #f0f4f8, #e6eaf0);
+    --card-background: #FFFFFF;
+}
+
+.pharmacist-dashboard {
+    font-family: 'Times New Roman', Times, serif;
+    background: var(--background-color);
+    min-height: 150vh;
+    padding: 2rem;
+    color: var(--text-color);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 1rem 2rem;
+    background: var(--header-background);
+    border-radius: 4px;
+    box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.06),
+        0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.dashboard-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(to right,
+            #1579f4,
+            #10B981,
+            #ff6b6b);
+}
+
+.dashboard-header h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: transparent;
+    background: linear-gradient(45deg,
+            #1579f4,
+            #10B981,
+            #ff6b6b);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-left: 28rem;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+.dashboard-header h1::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right,
+            #1579f4,
+            #10B981,
+            #ff6b6b);
+    opacity: 0.5;
+}
+
+
+
+.dashboard-filters {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    align-items: center;
+    /* Ensures vertical alignment */
+}
+
+.search-container {
+    position: relative;
+    flex-grow: 1;
+    height: 50px;
+    /* Ensure uniform height */
+    display: flex;
+    align-items: center;
+}
+
+
+.search-container input {
+    width: 100%;
+    height: 100%;
+    /* Ensures it fills the container */
+    padding: 0.75rem 2.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    font-size: 16px;
+}
+
+.search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+}
+
+.react-select-container,
+.date-picker-input {
+    width: 200px;
+    /* Adjust width as needed */
+    height: 40px !important;
+    /* Force uniform height */
+}
+
+.react-select-container .css-1s2u09g-control {
+    height: 40px !important;
+    /* Fix height */
+    min-height: 40px !important;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+}
+
+.react-select-container .css-1hwfws3 {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.react-select__control {
+    height: 40px !important;
+}
+
+.date-picker-input {
+    width: 100%;
+    height: 40px;
+    /* Match height */
+    padding: 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.prescriptions-table {
+    background-color: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.prescriptions-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.prescriptions-table th,
+.prescriptions-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.status-badge {
+    padding: 0.35rem 0.85rem;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 90px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.status-badge:hover {
+    opacity: 0.9;
+    transform: scale(1.25);
+}
+
+.status-badge.pending {
+    background-color: #FEF3C7;
+    color: #D97706;
+    border: 1px solid rgba(217, 119, 6, 0.2);
+}
+
+.status-badge.approved {
+    background-color: #D1FAE5;
+    color: #059669;
+    border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.action-buttons button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--primary-color);
+    transition: color 0.3s ease;
+}
+
+.action-buttons button:hover {
+    color: var(--secondary-color);
+}
+
+.prescription-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.prescription-modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.detail-section {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.medications-list {
+    margin-top: 1.5rem;
+}
+
+.medication-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.close-modal-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.close-modal-btn:hover {
+    background-color: var(--secondary-color);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .dashboard-filters {
+        flex-direction: column;
+    }
+
+    .prescriptions-table table {
+        font-size: 0.9rem;
+    }
+
+    .prescription-modal-content {
+        width: 95%;
+        margin: 0 auto;
+        padding: 1rem;
+    }
+}
+
+.process-btn,
+.reject-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.process-btn {
+    background-color: #10B981;
+    /* Green for approval */
+    color: white;
+}
+
+.reject-btn {
+    background-color: #DC2626;
+    /* Red for rejection */
+    color: white;
+}
+
+.process-btn:hover {
+    background-color: #059669;
+    /* Darker green on hover */
+    transform: scale(1.05);
+}
+
+.reject-btn:hover {
+    background-color: #B91C1C;
+    /* Darker red on hover */
+    transform: scale(1.05);
+}
+
+.button-group {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    justify-content: center;
+}
+
+/* Additional react-select specific styles */
+.css-2b097c-container {
+    width: 100%;
+}
+
+.process-med-btn {
+    background-color: #28a745;
+    /* Green color */
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.process-med-btn:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+}
+
+.process-med-btn:active {
+    background-color: #1e7e34;
+    /* Even darker green on click */
+    transform: scale(0.95);
+}
+
+/* ✅ Fullscreen modal background */
+.prescription-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Dark overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ✅ Modal content with scroll */
+.prescription-modal-content {
+    width: 600px;
+    max-height: 80vh;
+    /* Set max height to enable scrolling */
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ✅ Make entire modal scrollable */
+.scrollable-modal-content {
+    max-height: 60vh;
+    /* Adjust max height for scrolling */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    padding-right: 10px;
+}
+
+/* ✅ Custom scrollbar for Webkit browsers */
+.scrollable-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scrollable-modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    /* Light grey */
+    border-radius: 10px;
+}
+
+.scrollable-modal-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    /* Slightly darker grey */
+    border-radius: 10px;
+}
+
+.scrollable-modal-content::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+    /* Darker grey on hover */
+}
+
+/* ✅ Keep footer at the bottom */
+.modal-actions {
+    margin-top: auto;
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+}

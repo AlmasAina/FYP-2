@@ -1,0 +1,622 @@
+:root {
+    --primary-color: #2620c7;
+    --secondary-color: #2196F3;
+    --card-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    --accent-color: #00bcd4;
+    --text-color: #333;
+    --border-radius: 16px;
+}
+
+
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-color);
+}
+
+.doc-home-container {
+    display: flex;
+    transition: all 0.3s ease;
+    height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding-right: 20px;
+    font-family: 'Inter', sans-serif;
+    color: var(--text-color);
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: transparent;
+    max-width: calc(100% - 40px);
+    box-sizing: border-box;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.card {
+    background-color: white;
+    border-radius: var(--border-radius);
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08),
+        0 15px 40px rgba(0, 188, 212, 0.1);
+    width: 100%;
+    max-width: 900px;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    margin: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    padding: 25px 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(-45deg);
+    z-index: 1;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.appointments-grid,
+.doctors-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.appointment-card,
+.doctor-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 15px;
+    background-color: white;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.appointment-card:hover,
+.doctor-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.doctor-card.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+.doctor-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.doctor-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 3px solid var(--primary-color);
+    transition: transform 0.3s ease;
+}
+
+.doctor-image:hover {
+    transform: scale(1.1);
+}
+
+.appointment-header,
+.doctor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.status.confirmed {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: #2e7d32;
+}
+
+.status.pending {
+    background-color: rgba(245, 124, 0, 0.1);
+    color: #f57c00;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.dates-grid,
+.slots-grid {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.date-card,
+.slot-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.3s ease;
+}
+
+.date-card:hover,
+.slot-card:hover {
+    background-color: rgba(76, 175, 80, 0.1);
+    border-color: var(--primary-color);
+}
+
+.doctor-card.selected,
+.slot-card.selected {
+    border: 2px solid #00bcd4;
+    background-color: rgba(0, 188, 212, 0.1);
+    box-shadow: 0 0 10px rgba(0, 188, 212, 0.5);
+}
+
+.book-appointment-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.book-appointment-btn:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+.welcome-card .card-body {
+    text-align: center;
+}
+
+.quick-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.quick-action-btn {
+    padding: 12px 20px;
+    border: 2px solid var(--primary-color);
+    background-color: white;
+    color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-action-btn:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.quick-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: all 0.5s ease;
+}
+
+.quick-action-btn:hover::before {
+    left: 100%;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 20px;
+
+}
+
+.action-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--primary-color);
+    background-color: white !important;
+    color: var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.action-btn.active,
+.action-btn:hover {
+    background-color: var(--primary-color);
+    /* color: white; */
+    border-color: var(--primary-color);
+}
+
+.action-btn:active {
+    transform: scale(0.98);
+}
+
+/* Appointment Modal Styles */
+.appointment-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    backdrop-filter: blur(5px);
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.appointment-modal {
+    background: white;
+    border-radius: var(--border-radius);
+    width: 500px;
+    max-width: 90%;
+    box-shadow: var(--card-shadow);
+    position: relative;
+    overflow: hidden;
+    animation: popIn 0.3s ease;
+}
+
+@keyframes popIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+.modal-close-btn:hover {
+    transform: rotate(90deg);
+    color: var(--accent-color);
+}
+
+.modal-content {
+    padding: 30px;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-body {
+    display: grid;
+    gap: 15px;
+}
+
+.modal-detail {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 188, 212, 0.05);
+    padding: 15px;
+    border-radius: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.modal-detail:hover {
+    background: rgba(0, 188, 212, 0.1);
+}
+
+.modal-icon {
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.modal-action-btn {
+    flex: 1;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modal-action-btn:first-child {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.modal-action-btn.danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.modal-action-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-input,
+.filter-select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.filter-select {
+    width: 150px;
+}
+
+.search-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.appointment-slots {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+.appointment-slots h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.appointment-slots ul {
+    list-style: none;
+    padding: 0;
+}
+
+.appointment-slots li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+    font-size: 1em;
+}
+
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.popup-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    max-height: 70vh;
+    /* Use viewport height for consistent behavior */
+    overflow-y: auto;
+    /* Enable vertical scrolling */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 1.25rem;
+}
+
+ul.appointment-list {
+    padding: 0;
+    list-style: none;
+}
+
+li.appointment-item {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+li.appointment-item:hover {
+    background-color: #f0f0f0;
+}
+
+li.appointment-item.selected {
+    background-color: #007bff;
+    color: white;
+    border-color: #0056b3;
+}
+
+.book-appointment-btn {
+    right: 20px;
+    bottom: -60px;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.book-appointment-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.book-appointment-btn:hover:enabled {
+    background-color: #0056b3;
+}
+
+.popup-card::-webkit-scrollbar {
+    width: 8px;
+    /* Width of the scrollbar */
+}
+
+.popup-card::-webkit-scrollbar-thumb {
+    background: #ccc;
+    /* Color of the scrollbar thumb */
+    border-radius: 4px;
+    /* Rounded corners */
+}
+
+.popup-card::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+    /* Color when hovered */
+}
+
+.doc-home-container.sidebar-hidden .main-content {
+    width: 100%;
+    /* Take full width when sidebar is hidden */
+    padding: 20px;
+    /* Optional: Adjust padding as needed */
+    transition: all 0.3s ease-in-out;
+    /* Smooth transition for width adjustment */
+}
+
+.doc-home-container:not(.sidebar-hidden) .main-content {
+    width: calc(100% - 250px);
+    /* Adjust to leave space for the sidebar (assume sidebar width is 250px) */
+    transition: all 0.3s ease-in-out;
+}
+
+.doc-home-container.sidebar-hidden .action-btn {
+    max-width: 300px;
+    /* Increase button width */
+}
+
+.doc-home-container.sidebar-hidden .card {
+    max-width: 80%;
+    /* Expand card to full width */
+}

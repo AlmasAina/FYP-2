@@ -1,0 +1,369 @@
+/* Doctor Prescription Styles */
+
+/* Main Container */
+.doc-home-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: padding-left 0.3s ease;
+}
+
+/* Sidebar */
+.sidebar-visible {
+    padding-left: 270px;
+}
+
+.sidebar-hidden {
+    padding-left: 0;
+}
+
+/* Scrollable Container */
+.scrollable-container {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+/* Prescription Card */
+.doctor-prescription-card {
+    background-color: #e4f0f8;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    color: #002d5b;
+    width: 95%;
+    max-width: 1200px;
+    margin: 20px auto;
+    overflow-y: auto;
+    max-height: 90vh;
+}
+
+/* Adjust card size based on sidebar visibility */
+.doctor-prescription-card.with-sidebar {
+    width: 95%;
+}
+
+/* Prescription Header */
+.prescription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: 2px solid #002d5b;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.prescription-title h2 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #002d5b;
+    margin-bottom: 10px;
+}
+
+.prescription-date {
+    font-size: 14px;
+    color: #555;
+}
+
+.doctor-info {
+    text-align: right;
+}
+
+.doctor-info h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.doctor-info p {
+    margin: 3px 0;
+    font-size: 14px;
+}
+
+/* Form Sections */
+.prescription-form {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.form-section {
+    background-color: rgba(255, 255, 255, 0.7);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-section h4 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #002d5b;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 8px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.form-group {
+    flex: 1;
+    min-width: 200px;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: border 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #002d5b;
+    outline: none;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+/* List items (symptoms, lab tests) */
+.list-item-container {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.list-item-container input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.item-controls {
+    display: flex;
+    margin-left: 10px;
+}
+
+/* Medication items */
+.medication-item {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid #e0e0e0;
+}
+
+.medication-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.medication-header h5 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #002d5b;
+}
+
+.medication-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.medication-details .form-group {
+    flex: 1;
+    min-width: 150px;
+}
+
+/* Buttons */
+.add-btn,
+.save-btn,
+.clear-btn,
+.lab-btn,
+.pharm-btn,
+.control-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.add-btn {
+    background-color: #e6f0ff;
+    color: #002d5b;
+    margin-top: 10px;
+}
+
+.add-btn:hover {
+    background-color: #d1e3ff;
+}
+
+.control-btn {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    font-size: 18px;
+}
+
+.remove-btn {
+    background-color: #ffebee;
+    color: #b71c1c;
+}
+
+.remove-btn:hover {
+    background-color: #ffcdd2;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.save-btn {
+    background-color: #002d5b;
+    color: white;
+    padding: 10px 25px;
+}
+
+.save-btn:hover {
+    background-color: #003b7d;
+}
+
+.clear-btn {
+    background-color: #f5f5f5;
+    color: #555;
+    padding: 10px 25px;
+}
+
+.clear-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* New buttons for Lab and Pharmacy */
+.lab-btn {
+    background-color: #4caf50;
+    color: white;
+    padding: 10px 20px;
+}
+
+.lab-btn:hover {
+    background-color: #388e3c;
+}
+
+.pharm-btn {
+    background-color: #3f51b5;
+    color: white;
+    padding: 10px 20px;
+}
+
+.pharm-btn:hover {
+    background-color: #303f9f;
+}
+
+/* Button hover effect */
+.save-btn,
+.clear-btn,
+.lab-btn,
+.pharm-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.save-btn:after,
+.clear-btn:after,
+.lab-btn:after,
+.pharm-btn:after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s, height 0.3s;
+}
+
+.save-btn:hover:after,
+.clear-btn:hover:after,
+.lab-btn:hover:after,
+.pharm-btn:hover:after {
+    width: 300px;
+    height: 300px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .doctor-prescription-card {
+        padding: 20px;
+        width: 95%;
+    }
+
+    .prescription-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .doctor-info {
+        text-align: left;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .save-btn,
+    .clear-btn,
+    .lab-btn,
+    .pharm-btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}

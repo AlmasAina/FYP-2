@@ -1,0 +1,290 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Main Container */
+.doc-home-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: padding-left 0.3s ease;
+}
+
+/* Sidebar */
+.sidebar-visible {
+    padding-left: 270px;
+    /* Adjusted gap */
+}
+
+.sidebar-hidden {
+    padding-left: 0;
+}
+
+/* Profile Card */
+.doctor-profile-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e4f0f8;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+    flex-direction: row;
+    color: #002d5b;
+    gap: 20px;
+    max-width: 100%;
+    max-height: 100vh;
+    width: 100%;
+    overflow-y: auto;
+    /* Enable vertical scrolling if content overflows */
+    overflow-x: hidden;
+}
+
+/* Increase size when sidebar is visible */
+.doctor-profile-card.with-sidebar {
+    max-width: 95%;
+    max-height: 100vh;
+    margin: 0 auto;
+}
+
+.doctor-profile-card.no-sidebar {
+    max-width: 180%;
+    max-height: 100vh;
+    margin: auto;
+}
+
+/* Left Section - Doctor Image */
+.profile-image-container-doc {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-image-doc {
+    width: 80%;
+    max-height: 60vh;
+    object-fit: cover;
+    border-radius: 50%;
+    background-color: transparent;
+    mix-blend-mode: multiply;
+    /* or try screen, lighten, etc. */
+}
+
+
+/* Right Section - Profile Details */
+.profile-details {
+    flex: 2;
+}
+
+.profile-details h3 {
+    font-weight: 800;
+    font-size: 24px;
+}
+
+.profile-details .specialty {
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: 500;
+}
+
+.profile-details h4,
+.profile-details p {
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.profile-details ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}
+
+/* Responsiveness for small screens */
+@media (max-width: 768px) {
+    .doc-home-container {
+        padding-left: 0;
+    }
+
+    .doctor-profile-card {
+        flex-direction: column;
+        width: 90%;
+    }
+
+    .doctor-profile-card.with-sidebar {
+        width: 85%;
+    }
+
+    .doctor-profile-card.no-sidebar {
+        width: 90%;
+    }
+
+    .profile-image-container-doc {
+        margin-bottom: 20px;
+    }
+}
+
+/* Edit Profile Button */
+.edit-profile-btn {
+    background-color: #002d5b;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    position: relative;
+    /* Enables precise positioning */
+    top: 4px;
+    /* Moves the button slightly downward */
+    box-shadow: none;
+    /* Removes any shadow */
+}
+
+
+.edit-profile-btn:hover {
+    background: #003b7d;
+}
+
+/* Edit Profile Form */
+.edit-profile-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: auto;
+    max-width: 70%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.edit-profile-form.active {
+    display: block;
+}
+
+/* Form fields */
+.edit-profile-form .form-group input,
+.edit-profile-form .form-group select,
+.edit-profile-form .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* Scrollable Profile Form */
+.scrollable-form-container {
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.scrollable-form-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-form-container::-webkit-scrollbar-thumb {
+    background-color: #cccccc;
+}
+
+/* Number Control */
+.number-control {
+    position: relative;
+    width: 100%;
+}
+
+.number-control input {
+    width: 100%;
+    padding-right: 70px;
+    /* Add padding to make space for buttons */
+    padding-left: 10px;
+    /* Normal left padding */
+    height: 40px;
+    /* Adjust height for better appearance */
+    box-sizing: border-box;
+}
+
+/* Plus and Minus Buttons */
+.number-control .plus,
+.number-control .minus {
+    position: absolute;
+    right: 5px;
+    /* Align the buttons to the right */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    /* Increased width */
+    height: 30px;
+    /* Increased height for better appearance */
+    /* Dark blue */
+    color: #000000;
+    /* White text */
+    border: none;
+    /* Remove border */
+    border-radius: 5px;
+    /* Rounded corners */
+    font-size: 16px;
+    /* Font size for better readability */
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    line-height: 30px;
+    background: transparent;
+}
+
+/* Space between the Plus and Minus Buttons */
+.number-control .plus {
+    right: 40px;
+    /* Adjust the spacing */
+}
+
+.number-control .plus:hover,
+.number-control .minus:hover {
+    background-color: #003b7d;
+    /* Lighter blue on hover */
+}
+
+/* Remove focus outline for better UX */
+.number-control .plus:focus,
+.number-control .minus:focus {
+    outline: none;
+}
+
+/* Edit Icon */
+.edit-icon {
+    position: absolute;
+    cursor: pointer;
+    margin-left: 165px;
+    margin-top: 275px;
+}
+
+.edit-icon-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
