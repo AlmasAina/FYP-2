@@ -514,3 +514,131 @@ body.modal-open {
 .insurance-card-btn:hover {
     background-color: #0056b3;
 }
+
+/* Waiting Claims Card Icon */
+.waiting-icon {
+    color: #ff9800;
+}
+
+/* Popup Title */
+.waiting-popup h2 {
+    margin-bottom: 15px;
+}
+
+/* Close Icon */
+.waiting-popup .close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.waiting-popup .close:hover {
+    color: red;
+}
+
+/* Waiting Claims List */
+.waiting-claims-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.waiting-claims-list li {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+}
+
+.waiting-claims-list li:hover {
+    background-color: #ddd;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex !important;
+    justify-content: center !important;
+    gap: 20px !important;
+    /* Balanced gap */
+    margin-top: 20px !important;
+}
+
+/* Common Button Styling */
+.reject-btn,
+.accept-btn {
+    padding: 12px 24px !important;
+    /* Equal padding for both buttons */
+    border-radius: 8px !important;
+    /* Rounded corners */
+    font-size: 16px !important;
+    /* Uniform font size */
+    color: white !important;
+    /* White text */
+    border: none !important;
+    cursor: pointer !important;
+    min-width: 120px !important;
+    /* Uniform button width */
+    text-align: center !important;
+    font-weight: bold !important;
+    /* Bold text */
+    display: inline-block !important;
+}
+
+/* Reject Button: Red */
+.reject-btn {
+    background-color: #e74c3c !important;
+    /* Bright Red */
+    box-shadow: 0 4px 6px rgba(231, 76, 60, 0.3);
+    /* Red shadow */
+}
+
+/* Accept Button: Green */
+.accept-btn {
+    background-color: #27ae60 !important;
+    /* Bright Green */
+    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.3);
+    /* Green shadow */
+}
+
+/* Hover Effect (Both Buttons) */
+.reject-btn:hover,
+.accept-btn:hover {
+    opacity: 0.9 !important;
+    /* Slightly darker on hover */
+}
+
+
+/* Flippable Card Styling */
+.card-side {
+    width: 340px;
+    height: 180px;
+    background-color: #e0e0e0;
+    margin: 10px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.card-content {
+    text-align: center;
+}
+
+/* Detailed Popup */
+.detailed-popup {
+    width: 550px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    text-align: center;
+    position: center;
+}
+
+/* Close Icon Position */
+.top-left {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

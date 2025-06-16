@@ -1,0 +1,309 @@
+/* Help Desk Full Page Wrapper */
+.helpdesk-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: url('../../assets/images/patinet_bg.avif') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: padding-left 0.3s ease;
+    padding-left: 250px;
+    overflow-y: auto;
+    /* Allow scrolling */
+}
+
+/* Adjust when sidebar is hidden */
+.helpdesk-page.sidebar-hidden {
+    padding-left: 0;
+}
+
+/* Help Desk Card Container */
+.helpdesk-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #e4f0f8;
+    border: 2px solid #add8e6;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(173, 216, 230, 0.5);
+    padding: 30px;
+    width: 60%;
+    max-width: 800px;
+    max-height: 90vh;
+    margin: 20px auto;
+    transition: width 0.3s ease;
+    color: #002d5b;
+    overflow-y: auto;
+}
+
+/* Help Desk Header */
+.helpdesk-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.helpdesk-header h2 {
+    color: #002d5b;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.helpdesk-header p {
+    color: #0056b3;
+    font-size: 1rem;
+    max-width: 80%;
+    margin: 0 auto;
+}
+
+/* Status Messages */
+.status-message {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    text-align: center;
+    font-weight: 500;
+    animation: fadeIn 0.5s ease;
+}
+
+.status-message.success {
+    background-color: rgba(40, 167, 69, 0.2);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+    color: #155724;
+}
+
+.status-message.error {
+    background-color: rgba(220, 53, 69, 0.2);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+    color: #721c24;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Form Styling */
+.helpdesk-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+}
+
+.form-group label {
+    font-weight: bold;
+    color: #08246d;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #add8e6;
+    border-radius: 8px;
+    font-size: 1rem;
+    background: rgba(255, 255, 255, 0.9);
+    color: #002d5b;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #5a9bd6;
+    box-shadow: 0 0 5px rgba(90, 155, 214, 0.5);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.error-input {
+    border-color: #dc3545 !important;
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+/* Form Footer */
+.form-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.form-note {
+    font-size: 0.9rem;
+    color: #6c757d;
+    text-align: center;
+    font-style: italic;
+    max-width: 90%;
+}
+
+.submit-btn {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 30px;
+    background-color: #002d5b;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    min-width: 180px;
+}
+
+.submit-btn:hover {
+    background-color: #003b7d;
+    transform: translateY(-2px);
+}
+
+.submit-btn:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Contact Information Section */
+.contact-info {
+    width: 100%;
+    margin-top: 30px;
+    border-top: 1px solid #add8e6;
+    padding-top: 20px;
+}
+
+.contact-info h3 {
+    color: #002d5b;
+    font-size: 1.3rem;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.contact-methods {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.contact-method {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: rgba(255, 255, 255, 0.6);
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    min-width: 250px;
+}
+
+.contact-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #0056b3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.2rem;
+}
+
+.method-title {
+    font-weight: bold;
+    color: #002d5b;
+    margin: 0 0 5px 0;
+}
+
+.contact-method p {
+    margin: 0;
+    color: #0056b3;
+}
+
+/* Phone icon */
+.phone-icon:before {
+    content: "📞";
+    font-size: 20px;
+}
+
+/* Email icon */
+.email-icon:before {
+    content: "✉️";
+    font-size: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+    .helpdesk-card {
+        width: 75%;
+    }
+}
+
+@media (max-width: 768px) {
+    .helpdesk-page {
+        padding: 10px;
+        align-items: flex-start;
+    }
+
+    .helpdesk-card {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .helpdesk-header p {
+        max-width: 100%;
+    }
+
+    .contact-methods {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .contact-method {
+        width: 100%;
+        max-width: 350px;
+    }
+}
+
+@media (max-width: 480px) {
+    .helpdesk-card {
+        padding: 15px;
+        width: 95%;
+    }
+
+    .helpdesk-header h2 {
+        font-size: 1.6rem;
+    }
+
+    .submit-btn {
+        width: 100%;
+    }
+}

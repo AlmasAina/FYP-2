@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaHourglassHalf, FaClock, FaTimes, FaCheckCircle } from "react-icons/fa";
+import { FaHourglassHalf, FaClock, FaTimes, FaCheckCircle, FaSpinner, FaEllipsisH } from "react-icons/fa";
 import "./insurance.css";
 import insuranceCardImage from "../../assets/images/card_front.png";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
@@ -26,9 +26,64 @@ const InsuranceDashboard = () => {
   const [underReviewClaims, setUnderReviewClaims] = useState([]); // ✅ Add this line
   const [showUnderReviewClaimDetails, setShowUnderReviewClaimDetails] = useState(null);
   const [claimsSummary, setClaimsSummary] = useState([]);
+  const [showWaitingPopup, setShowWaitingPopup] = useState(false); // Ensure this is initialized as false
+
+  const [pendingConfirmationCount, setPendingConfirmationCount] = useState(0);
+  const [cardDetails, setCardDetails] = useState({ insuranceCardFront: "", insuranceCardBack: "" });
 
 
+  //for the card display
+  const [waitingClaims, setWaitingClaims] = useState([
+    "user1@gmail.com",
+    "user2@gmail.com",
+    "user3@gmail.com",
+    "user4@gmail.com",
+  ]);
+  const [selectedName, setSelectedName] = useState("");
+  const [showDetailPopup, setShowDetailPopup] = useState(false);
 
+
+  // Fetch insurance card details from the backend
+  const fetchInsuranceCardDetails = async (email) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/auth/insurance-card-details/${email}`
+      );
+      setCardDetails(response.data);
+      setShowDetailPopup(true); // Show detailed popup with cards
+    } catch (error) {
+      console.error("Error fetching insurance card details:", error);
+    }
+  };
+
+  // Fetch insurance card details from the backend
+  // const fetchInsuranceCardDetailsByEmail = async (email) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:5000/api/auth/pending-confirmation/${email}`
+  //     );
+  //     setCardDetails(response.data);
+  //     setShowDetailPopup(true); // Show detailed popup with cards
+  //   } catch (error) {
+  //     console.error("Error fetching insurance card details:", error);
+  //   }
+  // };
+
+  const fetchInsuranceCardDetailsByEmail = async (email) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/auth/pending-confirmation/${email}`
+      );
+
+      setCardDetails({
+        insuranceCardFront: response.data.insuranceCardFront,
+        insuranceCardBack: response.data.insuranceCardBack
+      });
+      setShowDetailPopup(true);
+    } catch (error) {
+      console.error("Error fetching insurance card details:", error);
+    }
+  };
 
 
   useEffect(() => {
@@ -45,6 +100,50 @@ const InsuranceDashboard = () => {
 
     fetchCompanyDetails();
   }, [email]);
+
+  useEffect(() => {
+    const fetchPendingConfirmations = async () => {
+      if (!companyDetails || !companyDetails.name) return;
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/auth/pending-confirmations/${companyDetails.name}`
+        );
+        setPendingConfirmationCount(response.data.length);
+      } catch (error) {
+        console.error("Error fetching pending confirmations:", error);
+      }
+    };
+    fetchPendingConfirmations();
+  }, [companyDetails]);
+
+  const fetchPendingConfirmationDetails = async () => {
+    if (!companyDetails || !companyDetails.name) return;
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/auth/pending-confirmation-details/${companyDetails.name}`
+      );
+      if (Array.isArray(response.data)) {
+        setWaitingClaims(response.data);
+      } else {
+        setWaitingClaims([]); // Set empty if response is not an array
+      }
+      setShowWaitingPopup(true); // Show the popup only on card click
+    } catch (error) {
+      console.error("Error fetching pending confirmation details:", error);
+    }
+  };
+  // insurance.js
+  useEffect(() => {
+    // Fetch pending confirmation details only when the card is clicked
+
+
+    fetchPendingConfirmationDetails();
+  }, [companyDetails]);
+  // On clicking the Waiting Claims card
+  const handleWaitingClaimsClick = () => {
+    fetchPendingConfirmationDetails(); // Fetch data when the card is clicked
+  };
+
 
   useEffect(() => {
     const fetchClaimsSummary = async () => {
@@ -249,6 +348,70 @@ const InsuranceDashboard = () => {
 
     }
   };
+  // Frontend function to remove pending confirmation
+  const removePendingConfirmation = async (email) => {
+    try {
+      const response = await axios.delete(`http://localhost:5000/api/auth/pending-confirmation/${email}`);
+
+      if (response.status === 200) {
+        toast.success("Pending confirmation removed successfully");
+        setTimeout(() => {
+          window.location.reload(); // Reload the page after success
+        }, 1000); // Wait for 1 second before reloading to show the toast
+      } else {
+        toast.error("Failed to remove pending confirmation");
+      }
+    } catch (error) {
+      console.error("Error removing pending confirmation:", error);
+      toast.error("Server error while removing pending confirmation");
+    }
+  };
+
+
+  const savePatientData = async () => {
+    try {
+      if (!companyDetails || !companyDetails.name) {
+        alert("Insurance company details are not available.");
+        return;
+      }
+
+      const response = await axios.post('http://localhost:5000/api/auth/patient', {
+        email: selectedName,
+        insuranceCompanyName: companyDetails.name,  // Updated to use companyDetails.name
+        insuranceCardFront: cardDetails.insuranceCardFront,
+        insuranceCardBack: cardDetails.insuranceCardBack
+      });
+
+      if (response.status === 201) {
+        alert('Patient data saved successfully');
+        setShowDetailPopup(false); // Close the popup after saving
+      } else {
+        alert(`Error saving data: ${response.data.message || 'Unknown error'}`);
+      }
+    } catch (error) {
+      // Enhanced error logging
+      if (error.response) {
+        // Server responded with a status other than 2xx
+        console.error("Error Response Data:", error.response.data);
+        console.error("Error Response Status:", error.response.status);
+        console.error("Error Response Headers:", error.response.headers);
+        alert(`Error: ${error.response.data.message || 'Server error occurred'}`);
+      } else if (error.request) {
+        // Request made but no response received
+        console.error("Error Request:", error.request);
+        alert('No response from the server. Please check your backend.');
+      } else {
+        // Something else caused the error
+        console.error("Error Message:", error.message);
+        alert(`Request error: ${error.message}`);
+      }
+    }
+  };
+
+
+
+
+
 
 
 
@@ -264,6 +427,14 @@ const InsuranceDashboard = () => {
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
   };
+  // Open detailed popup with selected name
+  const handleNameClick = (name) => {
+    setSelectedName(name);
+    setShowDetailPopup(true);
+    fetchInsuranceCardDetails(email);
+    fetchInsuranceCardDetailsByEmail(name);
+  };
+
 
   return (
 
@@ -293,8 +464,108 @@ const InsuranceDashboard = () => {
       <div className="card" onClick={() => setShowPendingPopup(true)}>
         <FaClock className="card-icon clock-icon" size={30} />
         <h3>Pending Claims</h3>
-        <p>{pendingClaimsCount}</p>  {/* ✅ Dynamic count */}
+        <p>{pendingClaimsCount}</p> {/* ✅ Dynamic count */}
       </div>
+      {/* Waiting Claims Card */}
+      <div className="card" onClick={handleWaitingClaimsClick}>
+        <FaEllipsisH className="card-icon waiting-icon" size={30} />
+        <h3>Waiting Claims</h3>
+        <p>{pendingConfirmationCount}</p>
+      </div>
+
+
+      {showWaitingPopup && (
+        <div className="popup-overlay">
+          <div className="popup waiting-popup">
+            <FaTimes className="close" onClick={() => setShowWaitingPopup(false)} />
+            <h2>Waiting Claims</h2>
+            <ul className="waiting-claims-list">
+              {waitingClaims.length > 0 ? (
+                waitingClaims.map((claim, index) => (
+                  <li key={index} onClick={() => handleNameClick(claim.email)}>
+                    {claim.email}
+                  </li>
+                ))
+              ) : (
+                <li>No pending confirmations found</li>
+              )}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {showWaitingPopup && (
+        <div className="popup-overlay">
+          <div className="popup waiting-popup">
+            <FaTimes className="close" onClick={() => setShowWaitingPopup(false)} />
+            <h2>Waiting Claims</h2>
+            <ul className="waiting-claims-list">
+              {waitingClaims.map((claim, index) => (
+                <li key={index} onClick={() => handleNameClick(claim.email)}>
+                  {claim.email}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {/* Detailed Popup with Flippable Card */}
+      {showDetailPopup && (
+        <div className="popup-overlay">
+          <div className="popup detailed-popup">
+            <FaTimes className="close top-left" onClick={() => setShowDetailPopup(false)} />
+            <h2>Details for: {selectedName}</h2>
+
+            {/* Flippable Card */}
+            <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+
+              {/* Front Side */}
+              <div className="card-side" onClick={handleFlip}>
+                <div className="card-content">
+                  <h3>Front Side</h3>
+                  {cardDetails.insuranceCardFront ? (
+                    <img
+                      src={cardDetails.insuranceCardFront}
+                      alt="Insurance Card Front"
+                      width="300"
+                      height="180"
+                    />
+                  ) : (
+                    <p>No Front Card Available</p>
+                  )}
+                </div>
+              </div>
+
+              {/* Back Side */}
+              <div className="card-side" onClick={handleFlip}>
+                <div className="card-content">
+                  <h3>Back Side</h3>
+                  {cardDetails.insuranceCardBack ? (
+                    <img
+                      src={cardDetails.insuranceCardBack}
+                      alt="Insurance Card Back"
+                      width="300"
+                      height="180"
+                    />
+                  ) : (
+                    <p>No Back Card Available</p>
+                  )}
+                </div>
+              </div>
+            </ReactCardFlip>
+
+            {/* Action Buttons */}
+            <div className="action-buttons">
+              <button className="reject-btn" onClick={() => removePendingConfirmation(selectedName)}>Reject</button>
+              <button className="accept-btn" onClick={() => { savePatientData(); removePendingConfirmation(selectedName); }}>Accept</button>
+            </div>
+          </div>
+        </div>
+      )
+      }
+
+
 
 
 
@@ -417,128 +688,133 @@ const InsuranceDashboard = () => {
       }
 
 
-      {showProcessedPopup && (
-        <div className="popup-overlay">
-          <div className="popup processed-popup">
-            <h2>Under Review Claims</h2>
+      {
+        showProcessedPopup && (
+          <div className="popup-overlay">
+            <div className="popup processed-popup">
+              <h2>Under Review Claims</h2>
 
-            <div className="processed-popup-header">
-              <span>Name</span>
-              <span>Doctor</span>
-              <span>Date</span>
+              <div className="processed-popup-header">
+                <span>Name</span>
+                <span>Doctor</span>
+                <span>Date</span>
+              </div>
+
+              {underReviewClaims.length > 0 ? (
+                underReviewClaims.map((claim, index) => (
+                  <div
+                    key={index}
+                    className="processed-claim-row"
+                    onClick={() => setShowUnderReviewClaimDetails(claim)} // ✅ Click to show details
+                  >
+                    <span>{claim.patientName}</span>
+                    <span>{claim.doctorName}</span>
+                    <span>{new Date(claim.consultancyDate).toLocaleDateString()}</span>
+                  </div>
+                ))
+              ) : (
+                <p>No under review claims found.</p>
+              )}
+
+              <FaTimes className="close" onClick={() => setShowProcessedPopup(false)} />
             </div>
+          </div>
+        )
+      }
 
-            {underReviewClaims.length > 0 ? (
-              underReviewClaims.map((claim, index) => (
-                <div
-                  key={index}
-                  className="processed-claim-row"
-                  onClick={() => setShowUnderReviewClaimDetails(claim)} // ✅ Click to show details
-                >
-                  <span>{claim.patientName}</span>
-                  <span>{claim.doctorName}</span>
-                  <span>{new Date(claim.consultancyDate).toLocaleDateString()}</span>
+      {/* Insurance Card Popup */}
+      {/* Insurance Card Popup */}
+      {
+        showInsuranceCard && showClaimDetails && (
+          <div className="insurance-card-overlay" onClick={(event) => {
+            if (event.target.classList.contains("insurance-card-overlay")) {
+              setShowInsuranceCard(false);
+            }
+          }}>
+            <div className="insurance-card-container">
+              <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+
+                {/* Front Side */}
+                <div className="card-side" onClick={() => setIsFlipped(true)}>
+                  <img
+                    src={showClaimDetails.insuranceCardFront || insuranceCardImage}
+                    alt="Insurance Card Front"
+                    width="300"
+                    height="180"
+                  />
                 </div>
-              ))
-            ) : (
-              <p>No under review claims found.</p>
-            )}
 
-            <FaTimes className="close" onClick={() => setShowProcessedPopup(false)} />
+                {/* Back Side */}
+                <div className="card-side" onClick={() => setIsFlipped(false)}>
+                  <img
+                    src={showClaimDetails.insuranceCardBack || insuranceCardImage}
+                    alt="Insurance Card Back"
+                    width="300"
+                    height="180"
+                  />
+                </div>
+
+              </ReactCardFlip>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
-      {/* Insurance Card Popup */}
-      {/* Insurance Card Popup */}
-      {showInsuranceCard && showClaimDetails && (
-        <div className="insurance-card-overlay" onClick={(event) => {
-          if (event.target.classList.contains("insurance-card-overlay")) {
-            setShowInsuranceCard(false);
-          }
-        }}>
-          <div className="insurance-card-container">
-            <ReactCardFlip isFlipped={isFlipped} flipDirection="horizontal">
+      {
+        showUnderReviewClaimDetails && (
+          <div className="popup-overlay">
+            <div className="popup claim-details-popup">
+              <FaTimes className="close" onClick={() => setShowUnderReviewClaimDetails(null)} />
 
-              {/* Front Side */}
-              <div className="card-side" onClick={() => setIsFlipped(true)}>
-                <img
-                  src={showClaimDetails.insuranceCardFront || insuranceCardImage}
-                  alt="Insurance Card Front"
-                  width="300"
-                  height="180"
-                />
+              <h2>Claim Details</h2>
+              <p><strong>Patient Name:</strong> {showUnderReviewClaimDetails.patientName}</p>
+              <p><strong>Consultancy Date:</strong> {new Date(showUnderReviewClaimDetails.consultancyDate).toLocaleDateString()}</p>
+              <p><strong>Doctor:</strong> {showUnderReviewClaimDetails.doctorName} ({showUnderReviewClaimDetails?.doctorFee || "N/A"} PKR)</p>
+
+              {/* Medicines Section */}
+              <h3>Medicines</h3>
+              <div className="details-table">
+                {showUnderReviewClaimDetails.medicines?.length > 0 ? (
+                  showUnderReviewClaimDetails.medicines.map((med, index) => (
+                    <div key={index} className="table-row">
+                      <span>{med.name}</span>
+                      <span>{med.fee} PKR</span>
+                    </div>
+                  ))
+                ) : (
+                  <p>No medicines found.</p>
+                )}
               </div>
 
-              {/* Back Side */}
-              <div className="card-side" onClick={() => setIsFlipped(false)}>
-                <img
-                  src={showClaimDetails.insuranceCardBack || insuranceCardImage}
-                  alt="Insurance Card Back"
-                  width="300"
-                  height="180"
-                />
+              {/* Lab Tests Section */}
+              <h3>Medical Tests</h3>
+              <div className="details-table">
+                {showUnderReviewClaimDetails.labTests?.length > 0 ? (
+                  showUnderReviewClaimDetails.labTests.map((test, index) => (
+                    <div key={index} className="table-row">
+                      <span>{test.testName}</span>
+                      <span>{test.testFee} PKR</span>
+                    </div>
+                  ))
+                ) : (
+                  <p>No lab tests found.</p>
+                )}
               </div>
 
-            </ReactCardFlip>
+              {/* Total Cost */}
+              <h3><strong>Total Amount:</strong> {showUnderReviewClaimDetails?.totalAmount || 0} PKR</h3>
+
+              {/* Buttons: View Insurance Card & Accept */}
+              {/* Accept Button (Second Row) */}
+              <div className="button-row">
+                <button className="accept-btn" onClick={() => handleAcceptClaim(showUnderReviewClaimDetails._id)}>
+                  <FaCheckCircle /> Accept
+                </button>
+              </div>
+            </div>
+
           </div>
-        </div>
-      )}
-
-      {showUnderReviewClaimDetails && (
-        <div className="popup-overlay">
-          <div className="popup claim-details-popup">
-            <FaTimes className="close" onClick={() => setShowUnderReviewClaimDetails(null)} />
-
-            <h2>Claim Details</h2>
-            <p><strong>Patient Name:</strong> {showUnderReviewClaimDetails.patientName}</p>
-            <p><strong>Consultancy Date:</strong> {new Date(showUnderReviewClaimDetails.consultancyDate).toLocaleDateString()}</p>
-            <p><strong>Doctor:</strong> {showUnderReviewClaimDetails.doctorName} ({showUnderReviewClaimDetails?.doctorFee || "N/A"} PKR)</p>
-
-            {/* Medicines Section */}
-            <h3>Medicines</h3>
-            <div className="details-table">
-              {showUnderReviewClaimDetails.medicines?.length > 0 ? (
-                showUnderReviewClaimDetails.medicines.map((med, index) => (
-                  <div key={index} className="table-row">
-                    <span>{med.name}</span>
-                    <span>{med.fee} PKR</span>
-                  </div>
-                ))
-              ) : (
-                <p>No medicines found.</p>
-              )}
-            </div>
-
-            {/* Lab Tests Section */}
-            <h3>Medical Tests</h3>
-            <div className="details-table">
-              {showUnderReviewClaimDetails.labTests?.length > 0 ? (
-                showUnderReviewClaimDetails.labTests.map((test, index) => (
-                  <div key={index} className="table-row">
-                    <span>{test.testName}</span>
-                    <span>{test.testFee} PKR</span>
-                  </div>
-                ))
-              ) : (
-                <p>No lab tests found.</p>
-              )}
-            </div>
-
-            {/* Total Cost */}
-            <h3><strong>Total Amount:</strong> {showUnderReviewClaimDetails?.totalAmount || 0} PKR</h3>
-
-            {/* Buttons: View Insurance Card & Accept */}
-            {/* Accept Button (Second Row) */}
-            <div className="button-row">
-              <button className="accept-btn" onClick={() => handleAcceptClaim(showUnderReviewClaimDetails._id)}>
-                <FaCheckCircle /> Accept
-              </button>
-            </div>
-          </div>
-
-        </div>
-      )
+        )
       }
 
 

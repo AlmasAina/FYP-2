@@ -1,4 +1,4 @@
-const { Doctor, Patient, Appointment, Admin, Claim, Prescription, LabAttendee, Pharmacist, LabTest, Medicine, InsuranceCompany } = require('../models/user_models');
+const { Doctor, Patient, Appointment, Admin, Claim, Prescription, LabAttendee, Pharmacist, LabTest, Medicine, InsuranceCompany, PendingConfirmation } = require('../models/user_models');
 
 const mongoose = require('mongoose');
 const XLSX = require("xlsx");
@@ -22,6 +22,37 @@ const addPatient = async (req, res) => {
     } catch (error) {
         console.error('Error saving patient email:', error);
         res.status(500).json({ error: 'Internal server error' });
+    }
+};
+const addcardPatient = async (req, res) => {
+    try {
+        const { email, insuranceCompanyName, insuranceCardFront, insuranceCardBack } = req.body;
+
+        console.log("Received data:", req.body); // Log the received data
+
+        // Check if the patient already exists
+        const existingPatient = await Patient.findOne({ email });
+        if (existingPatient) {
+            console.error("Patient already exists:", existingPatient);
+            return res.status(400).json({ message: 'Patient already exists' });
+        }
+
+        // Create a new patient entry
+        const newPatient = new Patient({
+            email,
+            insuranceProvider: insuranceCompanyName,
+            insuranceCardFront,
+            insuranceCardBack,
+            name: "Default Name",       // Placeholder, you may update this
+        });
+
+        await newPatient.save();
+        console.log("Patient saved successfully:", newPatient);
+        res.status(201).json({ message: 'Patient data saved successfully', patient: newPatient });
+    } catch (error) {
+        console.error("Error saving patient data:", error.message);
+        console.error("Stack trace:", error.stack);
+        res.status(500).json({ message: `Server error while saving patient data: ${error.message}` });
     }
 };
 
@@ -2274,6 +2305,197 @@ const getClaimsSummaryLastSixMonths = async (req, res) => {
 
 
 
+// const savePendingConfirmation = async (req, res) => {
+//     try {
+//         console.log("✅ Request received in controller");
+
+//         const { email, name, insuranceCompanyName } = req.body;
+
+//         // Check for uploaded files
+//         if (!req.files || !req.files['insuranceCardFront'] || !req.files['insuranceCardBack']) {
+//             console.error("❌ Missing file uploads");
+//             return res.status(400).json({ error: "Files are required" });
+//         }
+
+//         const frontCardPath = req.files['insuranceCardFront'][0].path;
+//         const backCardPath = req.files['insuranceCardBack'][0].path;
+
+//         // Validate required fields
+//         if (!email || !name || !insuranceCompanyName) {
+//             console.error("❌ Missing required fields:", { email, name, insuranceCompanyName });
+//             return res.status(400).json({ error: "All fields are required" });
+//         }
+
+//         // Create a new record in the PendingConfirmation collection
+//         const newConfirmation = new PendingConfirmation({
+//             email,
+//             name,
+//             insuranceCompanyName,
+//             insuranceCardFront: frontCardPath,
+//             insuranceCardBack: backCardPath
+//         });
+
+//         await newConfirmation.save();
+//         console.log("✅ Pending confirmation saved successfully!");
+//         res.status(201).json({ message: "Pending confirmation saved successfully!" });
+//     } catch (error) {
+//         console.error("❌ Error saving pending confirmation:", error.message);
+//         res.status(500).json({ error: "Failed to save pending confirmation" });
+//     }
+// };
+const savePendingConfirmation = async (req, res) => {
+    try {
+        const { email, name, insuranceCompanyName, insuranceCardFront, insuranceCardBack } = req.body;
+
+        // Create a new pending confirmation entry
+        const pendingConfirmation = new PendingConfirmation({
+            email,
+            name,
+            insuranceCompanyName,
+            insuranceCardFront,  // Save as base64
+            insuranceCardBack    // Save as base64
+        });
+
+        await pendingConfirmation.save();
+        res.status(201).json({ message: "Pending confirmation saved successfully!" });
+    } catch (error) {
+        console.error("Error saving pending confirmation:", error);
+        res.status(500).json({ error: "Failed to save pending confirmation." });
+    }
+};
+
+
+
+
+// insurance confirmation
+const getPendingConfirmations = async (req, res) => {
+    try {
+        const { companyName } = req.params;
+
+        const pendingConfirmations = await PendingConfirmation.find({ insuranceCompanyName: companyName });
+
+        if (!pendingConfirmations || pendingConfirmations.length === 0) {
+            return res.status(404).json({ message: "No pending confirmations found." });
+        }
+
+        res.status(200).json(pendingConfirmations);
+    } catch (error) {
+        console.error("Error fetching pending confirmations:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+}
+
+
+// auth_controller.js
+const getPendingConfirmationDetails = async (req, res) => {
+    try {
+        const { companyName } = req.params;
+
+        const pendingConfirmations = await PendingConfirmation.find(
+            { insuranceCompanyName: companyName }
+        );
+
+        if (!pendingConfirmations || pendingConfirmations.length === 0) {
+            return res.status(404).json({ message: "No pending confirmations found." });
+        }
+
+        // Ensure the response is an array of objects
+        const result = pendingConfirmations.map(item => ({
+            email: item.email,
+            name: item.name,
+            insuranceCompanyName: item.insuranceCompanyName,
+            insuranceCardFront: item.insuranceCardFront,
+            insuranceCardBack: item.insuranceCardBack
+        }));
+
+        res.status(200).json(result); // Return as an array of objects
+    } catch (error) {
+        console.error("Error fetching pending confirmation details:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+
+// auth_controller.js
+const getInsuranceCardDetails = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        const user = await PendingConfirmation.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Return both front and back card URLs
+        res.status(200).json({
+            insuranceCardFront: user.insuranceCardFront,
+            insuranceCardBack: user.insuranceCardBack,
+        });
+    } catch (error) {
+        console.error("Error fetching insurance card details:", error);
+        res.status(500).json({ error: "Internal server error" });
+    }
+};
+
+// Fetch pending confirmation details by email
+// const getPendingConfirmationByEmail = async (req, res) => {
+//     try {
+//         const { email } = req.params;
+//         const confirmation = await PendingConfirmation.findOne({ email });
+
+//         if (!confirmation) {
+//             return res.status(404).json({ error: 'No pending confirmation found for this email' });
+//         }
+
+//         res.status(200).json(confirmation);
+//     } catch (error) {
+//         console.error('Error fetching pending confirmation:', error);
+//         res.status(500).json({ error: 'Internal server error' });
+//     }
+// };
+const getPendingConfirmationByEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const confirmation = await PendingConfirmation.findOne({ email });
+
+        if (!confirmation) {
+            return res.status(404).json({ error: 'No pending confirmation found for this email' });
+        }
+
+        res.status(200).json({
+            insuranceCardFront: confirmation.insuranceCardFront,
+            insuranceCardBack: confirmation.insuranceCardBack
+        });
+    } catch (error) {
+        console.error('Error fetching pending confirmation:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+
+
+
+const removePendingConfirmation = async (req, res) => {
+    try {
+        const { email } = req.params;
+
+        // Delete the pending confirmation record by email
+        const result = await PendingConfirmation.findOneAndDelete({ email });
+
+        if (!result) {
+            return res.status(404).json({ message: 'Pending confirmation not found' });
+        }
+
+        res.status(200).json({ message: 'Pending confirmation removed successfully' });
+    } catch (error) {
+        console.error("Error removing pending confirmation:", error);
+        res.status(500).json({ message: 'Internal server error while removing pending confirmation' });
+    }
+};
+
+
+
+
 
 
 
@@ -2345,5 +2567,18 @@ module.exports = {
     getClaims,
     updateClaimStatus,
     getClaimStats,
-    getConfirmedAppointments
+    getConfirmedAppointments,
+
+    //signup
+    savePendingConfirmation,
+
+
+    //insurance
+    getPendingConfirmations,
+    getPendingConfirmationDetails,
+    getInsuranceCardDetails,
+    getPendingConfirmationByEmail,
+    addcardPatient,
+    removePendingConfirmation
+
 };

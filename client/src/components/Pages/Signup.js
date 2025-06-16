@@ -9,6 +9,8 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import axios from 'axios';
 import { db } from "../firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import imageCompression from 'browser-image-compression';
+
 
 function Signup() {
     const [email, setEmail] = useState('');
@@ -27,6 +29,19 @@ function Signup() {
     const [emailVerificationSent, setEmailVerificationSent] = useState(false);
     const [emailVerifiedForCurrentSession, setEmailVerifiedForCurrentSession] = useState(false);
     const [insuranceCompanies, setInsuranceCompanies] = useState([]);
+    const [frontCardImage, setFrontCardImage] = useState(null);
+    const [backCardImage, setBackCardImage] = useState(null);
+
+    const handleFrontCardUpload = (e) => {
+        setFrontCardImage(e.target.files[0]);
+    };
+
+    const handleBackCardUpload = (e) => {
+        setBackCardImage(e.target.files[0]);
+    };
+
+
+
 
     // Fetch insurance companies on component mount
     useEffect(() => {
@@ -61,6 +76,8 @@ function Signup() {
                 }
             }
         });
+
+
 
         const verificationCheckInterval = () => {
             const interval = setInterval(async () => {
@@ -139,32 +156,220 @@ function Signup() {
         )
     }
 
-    const handleSaveEmailToDatabase = async (email, password, uid, insuranceCompanyName) => {
-        try {
-            const userRef = doc(db, "users", uid);
-            await setDoc(userRef, { email, createdAt: new Date(), uid, insuranceCompanyName });
-            await axios.post('http://localhost:5000/api/auth/patients', { email, insuranceCompanyName });
-        } catch (error) {
-            console.error("Error saving user data:", error);
-        }
-    };
+    // const handleSaveEmailToDatabase = async (email, password, uid, insuranceCompanyName) => {
+    //     try {
+    //         const userRef = doc(db, "users", uid);
+    //         await setDoc(userRef, { email, createdAt: new Date(), uid, insuranceCompanyName });
+
+    //     } catch (error) {
+    //         console.error("Error saving user data:", error);
+    //     }
+    // };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (!insuranceCompanyName || !frontCardImage || !backCardImage) {
+    //         toast.error("Please complete all fields.");
+    //         return;
+    //     }
+    //     try {
+    //         // Step 1: Create user with Firebase authentication
+    //         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    //         await sendEmailVerification(userCredential.user);
+    //         toast.info("Verification email sent. Please check your inbox.");
+
+    //         // Step 2: Save user email to Firebase Firestore
+    //         await handleSaveEmailToDatabase(email, password, userCredential.user.uid, insuranceCompanyName);
+
+    //         // Step 3: Prepare FormData for backend API call
+    //         const formData = new FormData();
+    //         formData.append("email", email);
+    //         formData.append("name", "Default Name"); // You can update this with actual name input
+    //         formData.append("insuranceCompanyName", insuranceCompanyName);
+    //         formData.append("insuranceCardFront", frontCardImage);  // Correct: Use file object directly
+    //         formData.append("insuranceCardBack", backCardImage);    // Correct: Use file object directly
+
+    //         // Step 4: Make API call to save user data and files
+    //         const response = await axios.post("http://localhost:5000/api/auth/pending-confirmation", formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',  // Correct Content-Type
+    //             }
+    //         });
+
+    //         // Step 5: Check response and give feedback
+    //         if (response.status === 201) {
+    //             toast.success(response.data.message);
+    //         } else {
+    //             toast.error("Failed to save data.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Signup failed:", error.response?.data || error.message);
+    //         toast.error(`Signup failed: ${error.message}`);
+    //     }
+    // };
+
+    // const handleSaveEmailToDatabase = async (email, password, uid, insuranceCompanyName, frontCardImage, backCardImage) => {
+    //     try {
+    //         // Step 1: Save user email to Firebase Firestore
+    //         const userRef = doc(db, "users", uid);
+    //         await setDoc(userRef, { email, createdAt: new Date(), uid, insuranceCompanyName });
+
+    //         // Step 2: Prepare FormData for backend API call
+    //         const formData = new FormData();
+    //         formData.append("email", email);
+    //         formData.append("name", "Default Name"); // You can update this with actual name input
+    //         formData.append("insuranceCompanyName", insuranceCompanyName);
+    //         formData.append("insuranceCardFront", frontCardImage);  // Correct: Use file object directly
+    //         formData.append("insuranceCardBack", backCardImage);    // Correct: Use file object directly
+
+    //         // Step 3: Make API call to save user data and files in pending-confirmation collection
+    //         const response = await axios.post("http://localhost:5000/api/auth/pending-confirmation", formData, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data',  // Correct Content-Type
+    //             }
+    //         });
+
+    //         // Step 4: Check response and give feedback
+    //         if (response.status === 201) {
+    //             // toast.success(response.data.message);
+    //         } else {
+    //             toast.error("Failed to save data.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error saving user data:", error.response?.data || error.message);
+    //         toast.error(`Error saving user data: ${error.message}`);
+    //     }
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!insuranceCompanyName) {
-            toast.error("Please select an insurance company.");
+
+        if (!insuranceCompanyName || !frontCardImage || !backCardImage) {
+            toast.error("Please complete all fields.");
             return;
         }
+
         try {
+            // Step 1: Compress the images
+            const compressedFrontCardImage = await compressImage(frontCardImage);
+            const compressedBackCardImage = await compressImage(backCardImage);
+
+            // Step 2: Create user with Firebase authentication
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             await sendEmailVerification(userCredential.user);
-            await handleSaveEmailToDatabase(email, password, userCredential.user.uid, insuranceCompanyName);
             toast.info("Verification email sent. Please check your inbox.");
+
+            // Step 3: Save user data to Firebase Firestore and MongoDB with compressed images
+            await handleSaveEmailToDatabase(
+                email,
+                password,
+                userCredential.user.uid,
+                insuranceCompanyName,
+                compressedFrontCardImage,  // Pass compressed Front Card Image
+                compressedBackCardImage    // Pass compressed Back Card Image
+            );
+
+            // toast.success("Signup successful!");
         } catch (error) {
-            console.error("Signup failed:", error);
+            console.error("Signup failed:", error.message);
             toast.error(`Signup failed: ${error.message}`);
         }
     };
+
+
+    const handleSaveEmailToDatabase = async (email, password, uid, insuranceCompanyName, frontCardImage, backCardImage) => {
+        try {
+            const userRef = doc(db, "users", uid);
+            await setDoc(userRef, { email, createdAt: new Date(), uid, insuranceCompanyName });
+
+            // Prepare payload for MongoDB
+            const payload = {
+                email,
+                name: "Default Name",
+                insuranceCompanyName,
+                insuranceCardFront: frontCardImage,  // Base64 format
+                insuranceCardBack: backCardImage     // Base64 format
+            };
+
+            // API call to save user data with compressed images
+            const response = await axios.post("http://localhost:5000/api/auth/pending-confirmation", payload, {
+                headers: {
+                    'Content-Type': 'application/json',  // Use JSON for base64
+                }
+            });
+
+            if (response.status === 201) {
+                //toast.success("Signup successful! Pending confirmation saved.");
+            } else {
+                toast.error("Failed to save pending confirmation.");
+            }
+        } catch (error) {
+            console.error("Error saving user data:", error.response?.data || error.message);
+            toast.error(`Error saving user data: ${error.message}`);
+        }
+    };
+
+    // Image upload handler with compression
+    const handleImageChange = async (e, setImage) => {
+        const file = e.target.files[0];
+        if (file) {
+            try {
+                const compressedImage = await compressImage(file);
+                setImage(compressedImage); // Store compressed base64 image
+            } catch (error) {
+                console.error("Image compression failed:", error);
+            }
+        }
+    };
+
+    // Handlers for front and back card images
+    const handleFrontCardChange = (e) => handleImageChange(e, setFrontCardImage);
+    const handleBackCardChange = (e) => handleImageChange(e, setBackCardImage);
+
+
+
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (!insuranceCompanyName || !frontCardImage || !backCardImage) {
+    //         toast.error("Please complete all fields.");
+    //         return;
+    //     }
+    //     try {
+    //         // Step 1: Create user with Firebase authentication
+    //         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+    //         await sendEmailVerification(userCredential.user);
+    //         //toast.info("Verification email sent. Please check your inbox.");
+
+    //         // Step 2: Call handleSaveEmailToDatabase with necessary data
+    //         await handleSaveEmailToDatabase(
+    //             email,
+    //             password,
+    //             userCredential.user.uid,
+    //             insuranceCompanyName,
+    //             frontCardImage,
+    //             backCardImage
+    //         );
+
+    //     } catch (error) {
+    //         console.error("Signup failed:", error.response?.data || error.message);
+    //         toast.error(`Signup failed: ${error.message}`);
+    //     }
+    // };
+
+    // Image compression utility
+    const compressImage = async (file) => {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                resolve(event.target.result); // Return base64 format
+            };
+            reader.onerror = (error) => reject(error);
+            reader.readAsDataURL(file); // Convert to base64
+        });
+    };
+
+
 
     const handlePasswordChange = (e) => {
         const newPassword = e.target.value;
@@ -177,11 +382,21 @@ function Signup() {
         setConfirmPassword(newConfirmPassword);
         validatePassword(password, newConfirmPassword);
     };
+    const isFormValid = () => {
+        return email !== '' &&
+            password !== '' &&
+            confirmPassword !== '' &&
+            insuranceCompanyName !== '' &&
+            frontCardImage !== null &&
+            backCardImage !== null;
+    };
 
     const validatePakistaniEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(pk|com|org|edu|gov|mil)$/.test(email);
     const togglePasswordVisibility = (e) => { e.preventDefault(); setShowPassword(!showPassword); };
     const toggleConfirmPasswordVisibility = (e) => { e.preventDefault(); setShowConfirmPassword(!showConfirmPassword); };
-    const allValid = Object.values(validations).every(Boolean) && insuranceCompanyName !== '';
+    //const allValid = Object.values(validations).every(Boolean) && insuranceCompanyName !== '';
+    const allValid = isFormValid() && Object.values(validations).every(Boolean);
+
 
     return (
         <>
@@ -206,6 +421,27 @@ function Signup() {
                                 <p className="error-text">Invalid email format!</p>
                             )}
                         </div>
+                        <div className="image-upload-box" onClick={() => document.getElementById('front-card-input').click()}>
+                            {frontCardImage ? frontCardImage.name : "Upload Front Side of Card"}
+                            <input
+                                id="front-card-input"
+                                type="file"
+                                onChange={handleFrontCardUpload}
+                                style={{ display: 'none' }}
+                                accept="image/*"
+                            />
+                        </div>
+                        <div className="image-upload-box" onClick={() => document.getElementById('back-card-input').click()}>
+                            {backCardImage ? backCardImage.name : "Upload Back Side of Card"}
+                            <input
+                                id="back-card-input"
+                                type="file"
+                                onChange={handleBackCardUpload}
+                                style={{ display: 'none' }}
+                                accept="image/*"
+                            />
+                        </div>
+
 
                         {/* Insurance Company Dropdown */}
                         <div className="email-input-container">
@@ -223,6 +459,7 @@ function Signup() {
                                 ))}
                             </select>
                         </div>
+
 
                         {/* Password Input */}
                         <div className="password-input-container">
@@ -279,6 +516,7 @@ function Signup() {
                             >
                                 Continue
                             </button>
+
                             <div className="signup">
                                 <p>Already have an account? <a href="/login"><b>Login</b></a></p>
                             </div>

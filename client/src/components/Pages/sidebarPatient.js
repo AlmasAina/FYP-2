@@ -23,6 +23,7 @@ const SidebarPatient = ({ isSidebarVisible, toggleSidebar }) => {
                     <li><Link to="/profilePatient">Home</Link></li>
                     <li><Link to="/appointment_BookingPatient">Appointment Booking</Link></li>
                     <li><Link to="/patient-record">Prescriptions</Link></li>
+                    <li><Link to="/helpdesk" className="highlight-link">Help Desk</Link></li>
                     <li className="logout">
                         <Link to="/landingpage">
                             <img src={LogoutIcon} alt="Logout" className="logout-icon" /> <b>Logout</b>

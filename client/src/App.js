@@ -22,6 +22,7 @@ import InsuranceDashboard from "./components/Pages/insurance";
 import DoctorPrescription from "./components/Pages/doctor_prescription";
 import DoctorMedicalRecords from "./components/Pages/doc_record";
 import PatientPrescription from "./components/Pages/patient_record";
+import HelpDesk from "./components/Pages/helpdesk";
 
 const App = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(true);
@@ -88,6 +89,9 @@ const App = () => {
             <Route path="/patient-record" element={<PatientPrescription isSidebarVisible={isSidebarVisible} />} />
             <Route path="/Doctor_appointment" element={<AppointmentManagementCard isSidebarVisible={isSidebarVisible} />} />
             <Route path="/appointment_BookingPatient" element={<AppointmentBookingPatient isSidebarVisible={isSidebarVisible} />} />
+            {/* <Route path="/helpdesk" element={<HelpDesk isSidebarVisible={isSidebarVisible} />} /> */}
+            <Route path="/helpdesk" element={<HelpDesk isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar} />} />
+
 
           </Routes>
         </div>

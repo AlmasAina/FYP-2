@@ -3,9 +3,15 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const controllers = require('../controller/auth_controller');
 
+
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+
 router.get("/claims/stats", controllers.getClaimStats);
 // Patient Routes
 router.post('/patients', controllers.addPatient);
+router.post('/patient', controllers.addcardPatient);
+
 router.get('/patient-details', controllers.getPatientDetails);
 router.put('/update-patient', controllers.updatePatient);
 router.get('/insurance-companies', controllers.getInsuranceCompanies);
@@ -144,6 +150,25 @@ router.put('/claims/approve/:claimId', controllers.updateClaimToApproved);
 router.put('/claims/processing/:claimId', controllers.markClaimAsProcessing);
 router.get('/insurance/claims-summary/:companyName', controllers.getClaimsSummaryLastSixMonths);
 
+
+router.post('/pending-confirmation', controllers.savePendingConfirmation);
+
+
+
+
+
+
+
+
+//insurance confirmation
+router.get('/pending-confirmations/:companyName', controllers.getPendingConfirmations);
+router.get('/pending-confirmation-details/:companyName', controllers.getPendingConfirmationDetails);
+// auth_router.js
+router.get('/insurance-card-details/:email', controllers.getInsuranceCardDetails);
+// Add route to fetch pending confirmation details by email
+router.get('/pending-confirmation/:email', controllers.getPendingConfirmationByEmail);
+// Remove Pending Confirmation
+router.delete('/pending-confirmation/:email', controllers.removePendingConfirmation);
 
 
 

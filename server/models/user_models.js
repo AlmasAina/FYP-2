@@ -1,5 +1,15 @@
 const mongoose = require('mongoose');
 
+
+
+const pendingConfirmationSchema = new mongoose.Schema({
+    email: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    insuranceCompanyName: { type: String, required: true },
+    insuranceCardFront: { type: String, required: true }, // Base64
+    insuranceCardBack: { type: String, required: true } // Base64
+});
+
 // Doctor Schema (Profile information specific to doctors)
 const doctorSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
@@ -18,7 +28,7 @@ const doctorSchema = new mongoose.Schema({
 const patientSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String },
     gender: { type: String, enum: ['Male', 'Female', 'Other', 'N/A'], default: 'N/A' },
     age: { type: Number },
     bloodGroup: { type: String, enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-', 'N/A'], default: 'N/A' },
@@ -209,6 +219,7 @@ const insuranceCompanySchema = new mongoose.Schema({
 }, { collection: 'insuranceCompanies' });
 
 // Exporting Models
+const PendingConfirmation = mongoose.model('PendingConfirmation', pendingConfirmationSchema);
 const Doctor = mongoose.model('Doctor', doctorSchema);
 const Patient = mongoose.model('Patient', patientSchema);
 const Appointment = mongoose.model('Appointment', appointmentSchema);
@@ -222,4 +233,4 @@ const Medicine = mongoose.model('Medicine', medicineSchema);
 const InsuranceCompany = mongoose.model('InsuranceCompany', insuranceCompanySchema);
 
 
-module.exports = { Doctor, Patient, Appointment, Admin, Claim, Prescription, LabAttendee, Pharmacist, LabTest, Medicine, InsuranceCompany };
+module.exports = { Doctor, Patient, Appointment, Admin, Claim, Prescription, LabAttendee, Pharmacist, LabTest, Medicine, InsuranceCompany, PendingConfirmation };
